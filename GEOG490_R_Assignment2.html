@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    header {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    };
+</style>
+
+<body>
+
+  <header>
+    <h1>ODF Fire Analysis Between 2013 and 2023</h1>
+    <p>Author: Makayla Slick</p>
+    <p>GEOG 490</p>
+    <p>Assignment 2</p>
+    <p>Due: 2/12/2024</p>
+  </header>
+
+  <section id="introduction">
+    <h2>Introduction</h2>
+    <pre style="font-family: 'Times New Roman', Times, serif;">
+        The analysis performed through this project was on a comprehensive dataset 
+        containing information on fire statistics from 1962 to 2023 from the Oregon 
+        Department of Forestry. This report specifically focuses on data between 2013 
+        and 2023. The aim is to study the prevalence across fire patterns for different 
+        factors with data from the last decade for a more relevant look and understanding 
+        of fire behavior in Oregon. The visualizations presented below capture the 
+        prevalence of fires based on flame height and fire size in acres, providing valuable 
+        insights into the dynamics of wildfires during this significant timeframe.
+    </pre>
+  </section>
+
+  <section id="flame-height-section">
+    <a href=https://oregon-department-of-forestry-geo.hub.arcgis.com/datasets/geo::odf-fire-2/about>Link to download data</a></li>
+    <pre>
+Screenshots of the images are attached in the GitHub
+    
+Code to produce graphs:
+        # Installing packages
+        library(dplyr)
+        library(ggplot2)
+
+        # Setting and reading csv
+        file_path <- "C:\\Users\\Makayla Slick\\Downloads\\ODF_Fire.csv"
+        fire_data <- read.csv(file_path)
+
+        # attaching and reading Data
+        attach(fire_data)
+
+        # Filtering data to specific years
+        filtered_data <- filter(fire_data, FireYear >= 2013 & FireYear <= 2023)
+
+        # Creating bins for fire sizes in acres
+        filtered_data$Flame_length_bins <- cut(filtered_data$Flame_length, breaks = seq(1, 6, by = 1), include.lowest = TRUE)
+
+        # Creating a bar chart comparing the number of fires per range of fire length in feet
+        ggplot(filtered_data, aes(x = Flame_length_bins, fill = Flame_length_bins)) +
+            geom_bar() +
+            labs(title = "Distribution of Fires by Flame Height (2013-2023)",
+                x = "Height of Flame (Feet)",
+                y = "Number of Fires") + 
+            geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
+            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+        # Creating bins for fire sizes in acres
+        filtered_data$Size_acres_bins <- cut(filtered_data$Size_acres, breaks = seq(0, 500000, by = 50000), include.lowest = TRUE)
+  
+        # Creating a bar chart comparing the number of fires per range of fire size in acres
+        ggplot(filtered_data, aes(x = Size_acres_bins, fill = Size_acres_bins)) +
+            geom_bar() +
+            labs(title = "Number of Fires per Range of Fire Size in Acres (2013-2023)",
+                x = "Fire Size in Acres Range",
+                y = "Number of Fires") + 
+            geom_text(stat = "count", aes(label = ..count..), vjust = -0.5, size = 3) +
+            theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+    </pre>
+    <h2>Flame Height Distribution</h2>
+    <img src="../../GEOG_490_R/Screenshot 2024-02-12 170349.png" alt="Flame Height Distribution" width="1000" height="400">
+  </section>
+
+  <section id="fire-size-section">
+    <h2>Fire Size Distribution (2013-2023)</h2>
+    <img src="../../GEOG_490_R/Screenshot 2024-02-12 170414.png" alt="Fire Size Distribution" width="1000" height="400">
+  </section>
+
+  <section id="analysis">
+    <h2>Analysis</h2>
+    <pre style="font-family: 'Times New Roman', Times, serif;">
+      The majority of fires exhibit a flame height of one foot. There is a significant decrease in the number 
+      of fires as the flame height increases. With each foot of flame height growth there is an exponential decrease 
+      in flame height. Analyzing this trend, along with the causes of these fires can contribute to an understanding 
+      and development of predictive models of for estimating fire height based on specific causes of the fire. 
+      There is also a disproportionately high number of fires that remain smaller than 50,000 acres during peak fire 
+      spread. This information has the potential to lead to predictive models focused on analyzing fire size. 
+      When studying specific regions and zones, this data coupled with NDVI, aspect, slope, and insolation data, 
+      enables the creation of potential fire risk indexes. These indices facilitate predictions regarding the potential 
+      size a fire may reach.
+    </pre>
+  </section>
+
+</body>
+
+</html>
